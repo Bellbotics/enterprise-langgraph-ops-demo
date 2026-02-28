@@ -1,0 +1,16 @@
+# Portable baseline policy config (adjust per enterprise).
+env_rules:
+  dev:
+    require_approval: false
+    max_risk: high
+  staging:
+    require_approval: true
+    max_risk: high
+  prod:
+    require_approval: true
+    max_risk: medium
+
+# Example of output blocking patterns (demo only).
+deny_output_patterns:
+  - "SSN:"
+  - "DOB:"
