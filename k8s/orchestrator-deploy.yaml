@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestrator
+  namespace: ops-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator
+  template:
+    metadata:
+      labels:
+        app: orchestrator
+    spec:
+      containers:
+        - name: orchestrator
+          image: orchestrator:local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OUT_DIR
+              value: /app/out
+            - name: POLICY_PATH
+              value: /app/app/policies/policy.yaml
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: out
+              mountPath: /app/out
+      volumes:
+        - name: out
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator
+  namespace: ops-demo
+spec:
+  selector:
+    app: orchestrator
+  ports:
+    - port: 8000
+      targetPort: 8000

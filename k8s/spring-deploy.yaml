@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-spring-service
+  namespace: ops-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-spring-service
+  template:
+    metadata:
+      labels:
+        app: sample-spring-service
+    spec:
+      containers:
+        - name: app
+          image: sample-spring-service:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-spring-service
+  namespace: ops-demo
+spec:
+  selector:
+    app: sample-spring-service
+  ports:
+    - port: 8080
+      targetPort: 8080
